@@ -5,10 +5,13 @@ import './App.css'
 
 function App() {
 const [messages, setMessages] = useState(["hi there", "hello"]);
-const wsRef = useRef();
+
+const wsRef = useRef<WebSocket | null>(null);
+
+const inputRef = useRef<HTMLInputElement | null>(null);
 
 useEffect(()=>{
-  const ws = new WebSocket("http://localhost:8080");
+  const ws = new WebSocket("ws://localhost:8080");
   ws.onmessage = (event) =>{
     setMessages(m => [...m, event.data])
   }
@@ -19,7 +22,7 @@ useEffect(()=>{
       payload:{
         roomId: "red"
       }
-    }))
+    })) 
   }
 }, []);
 
@@ -33,10 +36,13 @@ useEffect(()=>{
           </div>)}
       </div>
       <div className='w-full bg-white flex'>
-        <input id="message" className="flex-1 p-4"></input>
+       
+        <input ref={inputRef} id="message" className="flex-1 p-4"></input>
         <button onClick={()=>{
-          const message = document.getElementById("message")?.value;
-          wsRef.current.send(JSON.stringify({
+          
+          const message = inputRef.current?.value;
+          
+          wsRef.current?.send(JSON.stringify({
             type: "chat",
             payload:{
               message: message
