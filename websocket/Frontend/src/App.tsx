@@ -4,14 +4,15 @@ import { useEffect, useRef, useState,  } from 'react'
 import './App.css'
 
 function App() {
-const [messages, setMessages] = useState(["hi there", "hello"]);
+const [messages, setMessages] = useState(["Hii", "Welcome to chat room"]);
 
 const wsRef = useRef<WebSocket | null>(null);
 
 const inputRef = useRef<HTMLInputElement | null>(null);
 
 useEffect(()=>{
-  const ws = new WebSocket("ws://localhost:8080");
+  const ws = new WebSocket("wss://pingme-2.onrender.com");
+
   ws.onmessage = (event) =>{
     setMessages(m => [...m, event.data])
   }
